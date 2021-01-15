@@ -1,9 +1,30 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-let Person;
+const Schema = mongoose.Schema;
+
+const personPrototype = new Schema({
+  name: { type: String, required: true },
+  age: Number,
+  favoriteFoods: [String],
+});
+
+let Person = mongoose.model("Person", personPrototype);
 
 const createAndSavePerson = (done) => {
+  let kali = new Person({
+    name: "Kali",
+    age: 90,
+    favoriteFoods: ["mango", "cloud data"],
+  });
+  kali.save(function (err, data) {
+    if (err) return console.log("ERROR: ", err);
+    done(null, data);
+  });
   done(null /*, data*/);
 };
 
